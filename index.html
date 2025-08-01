@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movie Rating Dashboard</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: #222;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2rem;
+    }
+    .data {
+      margin: 1rem 0;
+    }
+    .data p {
+      margin: 0.5rem 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="movie-title">🎬 Movie Title</h1>
+    <div class="data">
+      <p id="last-updated">🕒 Last updated: --</p>
+      <p id="tweets-analyzed">📊 Tweets analyzed: --</p>
+      <p id="positive-count">✅ Positive: --</p>
+      <p id="neutral-count">⚪ Neutral: --</p>
+      <p id="negative-count">❌ Negative: --</p>
+      <p id="rating">⭐ Final Rating: -- / 5</p>
+    </div>
+  </div>
+  <script>
+    fetch('data.json')
+      .then(response => response.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          const latest = data[0];
+          document.getElementById('movie-title').textContent = '🎬 ' + (latest.movie || "Movie Title");
+          document.getElementById('last-updated').textContent = '🕒 Last updated: ' + (latest.last_updated || "--");
+          document.getElementById('tweets-analyzed').textContent = '📊 Tweets analyzed: ' + (latest.tweets_analyzed || "--");
+          document.getElementById('positive-count').textContent = '✅ Positive: ' + (latest.positive || 0);
+          document.getElementById('neutral-count').textContent = '⚪ Neutral: ' + (latest.neutral || 0);
+          document.getElementById('negative-count').textContent = '❌ Negative: ' + (latest.negative || 0);
+          document.getElementById('rating').textContent = '⭐ Final Rating: ' + (latest.rating || "--") + ' / 5';
+        } else {
+          console.warn("No data found in data.json");
+        }
+      })
+      .catch(err => {
+        console.error("Failed to fetch data.json:", err);
+      });
+  </script>
+</body>
+</html>
